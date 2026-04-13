@@ -1,3 +1,6 @@
 __pycache__
 *.py[cod]
 .DS_Store
+alien_invasion1.py
+alien_text.py   
+current_msg.py
