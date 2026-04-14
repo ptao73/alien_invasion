@@ -32,6 +32,7 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
             
@@ -96,6 +97,12 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
 
+        """Check for collisions between bullets and aliens."""
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if not self.aliens:
+            self.bullets.empty()
+            self._create_fleet()
+
     def _create_fleet(self):
         """Create the fleet of aliens."""
         # Create an alien and find the number of aliens in a row.
@@ -138,6 +145,26 @@ class AlienInvasion:
         new_alien.rect.x = new_alien.x
         new_alien.rect.y = new_alien.y
         self.aliens.add(new_alien)
+
+
+        
+    def _check_fleet_edges(self):
+        """Check if any aliens have reached the edge of the screen."""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Change the direction of the fleet."""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
+
+    def _update_aliens(self):
+        """Update the positions of all aliens in the fleet."""
+        self._check_fleet_edges()
+        self.aliens.update()
 
 
     def _update_screen(self):

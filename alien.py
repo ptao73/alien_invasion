@@ -16,6 +16,7 @@ class Alien(Sprite):
         pygame.transform.smoothscale(self.image, (60, 60))
         self.image = pygame.transform.smoothscale(self.image, (60, 60))
         self.rect = self.image.get_rect()
+        self.screen_rect = ai_game.screen.get_rect()
 
         # Start each new alien near the top left of the screen.
         self.rect.x = self.rect.width
@@ -27,6 +28,13 @@ class Alien(Sprite):
     def blitme(self):
         """Draw the alien at its current location."""
         self.screen.blit(self.image, self.rect)
+
+    def check_edges(self):
+        """Return True if alien is at an edge of screen."""
+        if self.rect.right >= self.screen_rect.right or self.rect.left <= 0:
+            return True
+        if self.rect.bottom >= self.screen_rect.bottom or self.rect.top <= 0:
+            return True
 
     def update(self):
         """Move the alien to the right or left."""
